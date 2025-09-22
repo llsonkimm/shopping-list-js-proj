@@ -23,28 +23,31 @@ function addItem(e) {
 
     if(itemValue === ''){
         alert('Please Add an Item');
-        return;
+
     } else {
         
-    const li = document.createElement('li')
-    li.className = 'item';
+            const li = document.createElement('li')
+            li.className = 'item';
 
-    const p = document.createElement('p')
-    p.innerText = itemValue;
-    
-    const icon = createIcon('fa-solid fa-circle-xmark');
-    
+            const p = document.createElement('p')
+            p.innerText = itemValue;
+            
+            const icon = createIcon('fa-solid fa-circle-xmark');
+            
 
-    li.appendChild(p)
-    li.appendChild(icon);
+            li.appendChild(p)
+            li.appendChild(icon);
 
-    ul.appendChild(li);
+            ul.appendChild(li);  
 
-    
-    }
+           listsUL.style.display = 'block';
+           removeUL()
+    } 
+
     newItem.value = '';
     
 }
+
 
 function createIcon(classes) {
     const icon = document.createElement('i');
@@ -104,14 +107,45 @@ function removeUL() {
 
 
 function clearBtn(){
+  
     listsUL.style.display = 'none'
     clear.style.display = 'none'
     filter.style.display = 'none'
+
 }
 
+// function displayUI(){
 
+//         const form = document.createElement('form');
+//         form.className = 'new-forms'
+
+//         const div = document.createElement('div')
+//         div.className = 
+
+//         const input =  document.createElement('input');
+//         input.className = 'new-item'
+
+//         const submit = document.createElement('.btn-submit')
+
+//         const ul = document.createElement('.listed-items')
+
+//         const filter = document.createElement('.filter')
+
+//         const clear = document.createElement('.clear-btn')
+
+//         const itemlist = ul.createElementAll('li');
+
+//         const listsUL = document.createElement('.lists')
+//         clear.style.display = 'block'
+//         listsUL.style.display = 'block'
+//         filter.style.display = 'block'
+// }
 
 form.addEventListener('submit', addItem)
 ul.addEventListener('click', removeItem)
 filter.addEventListener('keyup', filteredItem)
 clear.addEventListener('click', clearBtn)
+
+
+
+removeUL();
