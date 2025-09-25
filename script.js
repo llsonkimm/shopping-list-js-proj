@@ -1,151 +1,115 @@
+const container = document.querySelector('.container')
 
-const form = document.querySelector('.new-items');
+const newItem = document.querySelector('.new-item');
 
-const newItem =  document.querySelector('.new-item');
+const addBtn = document.getElementById('add-btn');
 
-const submit = document.querySelector('.btn-submit')
+const form = document.querySelector('.filter')
 
-const ul = document.querySelector('.listed-items')
+const filtering = document.querySelector('.filtering');
 
-const filter = document.querySelector('.filter')
+const lists = document.querySelector('.lists');
 
-const clear = document.querySelector('.clear-btn')
+const ul = document.querySelector('ul');
 
-const itemlist = ul.querySelectorAll('li');
+const li = ul.querySelectorAll('li');
 
-const listsUL = document.querySelector('.lists')
-
-
-function addItem(e) {
-    e.preventDefault();
-
-    const itemValue = newItem.value;
-
-    if(itemValue === ''){
-        alert('Please Add an Item');
-
-    } else {
-        
-            const li = document.createElement('li')
-            li.className = 'item';
-
-            const p = document.createElement('p')
-            p.innerText = itemValue;
-            
-            const icon = createIcon('fa-solid fa-circle-xmark');
-            
-
-            li.appendChild(p)
-            li.appendChild(icon);
-
-            ul.appendChild(li);  
-
-           listsUL.style.display = 'block';
-           removeUL()
-    } 
-
-    newItem.value = '';
-    
-}
+const clear = document.getElementById('clearer');
 
 
-function createIcon(classes) {
-    const icon = document.createElement('i');
-    icon.className = classes;
-    return icon;
-}
 
 
-function removeItem(e){
-    
-    if (e.target.classList.contains('fa-solid')){ 
-         e.target.parentElement.remove();
-    }
-
-    removeUL();
-}
-
-
-function filteredItem(e){
+function addNewItem(e) {
 
     e.preventDefault();
 
-    const filt = document.querySelector('.filtering');
+    const newEl = newItem.value;
 
-    const text = filt.value.toLowerCase();
+    const li = document.createElement('li');
+    li.className = 'item';
+
+    const p = document.createElement('p');
+    p.innerText = newEl;
     
 
-    const lists = Array.from(ul.children);
+    const icon = document.createElement('i')
+    icon.className = 'fa-solid fa-circle-xmark';
 
-    for(let list of lists){
-        let words = list.textContent.toLowerCase();
+    if(p.innerText === ''){
+        alert('Please Add an Item')
+    } if(!clearItems) {
 
-        if(words.indexOf(text) !== -1){
-            list.style.display = 'flex';
-        }
-        else {
-            list.style.display = 'none';
-           }
+    li.appendChild(p);
+    li.appendChild(icon);
+    ul.appendChild(li);
+
+    }
+    else{
+        createForm();
+        createLists();
+        createBtn();
+    }
+    newItem.value = ''
+
+}
+
+
+
+function deleteItem(e) {
+    if(e.target.nodeName === 'I') {
+        e.target.parentElement.remove();
+    } if(Array.from(ul.children).length === 0) {
+        clearItems()
     }
 }
 
-function removeUL() {
- 
-    let ulList = Array.from(ul.children)
-    if(ulList.length === 0){
-        clear.style.display = 'none'
-        listsUL.style.display = 'none'
-        filter.style.display = 'none'
-    } else {
-        clear.style.display = 'block'
-        listsUL.style.display = 'block'
-        filter.style.display = 'block'
-    }
+function clearItems(e) {
+    
+    function removeLists() {
+    form.remove();
+    lists.remove();
+    clear.remove();
+}
+removeLists()
+}
 
+function createForm() {
+    const form = document.createElement('form');
+    form.className = 'filter';
+
+    form.innerHTML = `<h4>Filter Items</h4>
+            <div class="filtered">
+                <input type="text" class="filtering" placeholder="Filter Items">
+            </div>`
+    
+    container.appendChild(form)
+}
+
+function createLists() {
+    const div = document.createElement('div');
+    div.className = 'lists';
+
+    div.innerHTML = `
+        <h4>Listed Items</h4>
+        <ul class="listed-items">
+        </ul>
+        </div>`
+    container.appendChild(div)
+}
+
+function createBtn () {
+    const btn = document.createElement('button');
+    btn.id = 'clearer';
+    btn.className = 'clear-btn';
+    btn.textContent = 'Clear All';
+
+    container.appendChild(btn)
 }
 
 
 
-function clearBtn(){
-  
-    listsUL.style.display = 'none'
-    clear.style.display = 'none'
-    filter.style.display = 'none'
 
-}
+addBtn.addEventListener('click', addNewItem);
+ul.addEventListener('click', deleteItem)
+clear.addEventListener('click', clearItems)
 
-// function displayUI(){
-
-//         const form = document.createElement('form');
-//         form.className = 'new-forms'
-
-//         const div = document.createElement('div')
-//         div.className = 
-
-//         const input =  document.createElement('input');
-//         input.className = 'new-item'
-
-//         const submit = document.createElement('.btn-submit')
-
-//         const ul = document.createElement('.listed-items')
-
-//         const filter = document.createElement('.filter')
-
-//         const clear = document.createElement('.clear-btn')
-
-//         const itemlist = ul.createElementAll('li');
-
-//         const listsUL = document.createElement('.lists')
-//         clear.style.display = 'block'
-//         listsUL.style.display = 'block'
-//         filter.style.display = 'block'
-// }
-
-form.addEventListener('submit', addItem)
-ul.addEventListener('click', removeItem)
-filter.addEventListener('keyup', filteredItem)
-clear.addEventListener('click', clearBtn)
-
-
-
-removeUL();
