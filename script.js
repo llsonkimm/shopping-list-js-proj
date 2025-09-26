@@ -12,8 +12,6 @@ const lists = document.querySelector('.lists');
 
 const ul = document.querySelector('ul');
 
-const li = ul.querySelectorAll('li');
-
 const clear = document.getElementById('clearer');
 
 
@@ -21,34 +19,32 @@ const clear = document.getElementById('clearer');
 
 function addNewItem(e) {
 
+     
+  
+
     e.preventDefault();
 
     const newEl = newItem.value;
 
     const li = document.createElement('li');
+    
     li.className = 'item';
 
     const p = document.createElement('p');
     p.innerText = newEl;
-    
-
     const icon = document.createElement('i')
     icon.className = 'fa-solid fa-circle-xmark';
 
     if(p.innerText === ''){
         alert('Please Add an Item')
-    } if(!clearItems) {
-
+    } 
+    
+    else{   
     li.appendChild(p);
-    li.appendChild(icon);
+    li.appendChild(icon); 
     ul.appendChild(li);
-
     }
-    else{
-        createForm();
-        createLists();
-        createBtn();
-    }
+    checkUI()
     newItem.value = ''
 
 }
@@ -58,52 +54,55 @@ function addNewItem(e) {
 function deleteItem(e) {
     if(e.target.nodeName === 'I') {
         e.target.parentElement.remove();
-    } if(Array.from(ul.children).length === 0) {
-        clearItems()
+    } 
+    checkUI();
+}
+
+function clearItems() {
+    
+    while(ul.firstElementChild){
+        ul.removeChild(ul.firstElementChild);
     }
+
+    checkUI()
+
 }
 
-function clearItems(e) {
-    
-    function removeLists() {
-    form.remove();
-    lists.remove();
-    clear.remove();
-}
-removeLists()
-}
+function filterItems(e){
+    e.preventDefault();
 
-function createForm() {
-    const form = document.createElement('form');
-    form.className = 'filter';
+    const li = ul.querySelectorAll('li');
 
-    form.innerHTML = `<h4>Filter Items</h4>
-            <div class="filtered">
-                <input type="text" class="filtering" placeholder="Filter Items">
-            </div>`
-    
-    container.appendChild(form)
-}
 
-function createLists() {
-    const div = document.createElement('div');
-    div.className = 'lists';
+    const text = e.target.value.toLowerCase();
 
-    div.innerHTML = `
-        <h4>Listed Items</h4>
-        <ul class="listed-items">
-        </ul>
-        </div>`
-    container.appendChild(div)
+    li.forEach(item => {
+        const textEl = item.firstElementChild.innerText.toLowerCase();
+        console.log(textEl)
+        if(textEl.indexOf(text) !== -1){
+            item.style.display = 'flex';
+        } else{
+            item.style.display = 'none';
+        }
+    })
+
+    // console.log(li);
 }
 
-function createBtn () {
-    const btn = document.createElement('button');
-    btn.id = 'clearer';
-    btn.className = 'clear-btn';
-    btn.textContent = 'Clear All';
 
-    container.appendChild(btn)
+function checkUI(){
+    const li = ul.querySelectorAll('li');
+    // console.log(Array.from(ul.children));
+    if(li.length === 0){
+        form.style.display = 'none';
+        lists.style.display = 'none';
+        clear.style.display = 'none';
+    } else {
+        lists.style.display = 'block';
+        form.style.display = 'block';
+        clear.style.display = 'block';
+    }
+
 }
 
 
@@ -112,4 +111,6 @@ function createBtn () {
 addBtn.addEventListener('click', addNewItem);
 ul.addEventListener('click', deleteItem)
 clear.addEventListener('click', clearItems)
+form.addEventListener('input', filterItems)
 
+checkUI()
