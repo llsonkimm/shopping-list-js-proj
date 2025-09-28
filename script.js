@@ -1,55 +1,79 @@
 const container = document.querySelector('.container')
-
 const newItem = document.querySelector('.new-item');
-
 const addBtn = document.getElementById('add-btn');
-
 const form = document.querySelector('.filter')
-
 const filtering = document.querySelector('.filtering');
-
 const lists = document.querySelector('.lists');
-
 const ul = document.querySelector('ul');
-
 const clear = document.getElementById('clearer');
 
 
 
+function displayItems(){
+    const ItemsfromStorage = getitemsFromStorage();
+
+    ItemsfromStorage.forEach(item =>{
+        addItemtoDom(item);
+        checkUI();
+    })
+}
+
 
 function addNewItem(e) {
-
-     
-  
-
     e.preventDefault();
 
     const newEl = newItem.value;
+    addItemtoDom(newEl);
+    addItemToStorage(newEl);
+    
+    checkUI()
+    newItem.value = ''
+
+}
+
+function addItemtoDom(item) {
 
     const li = document.createElement('li');
     
     li.className = 'item';
 
     const p = document.createElement('p');
-    p.innerText = newEl;
+    p.innerText = item;
     const icon = document.createElement('i')
     icon.className = 'fa-solid fa-circle-xmark';
 
     if(p.innerText === ''){
         alert('Please Add an Item')
+        return;
     } 
     
-    else{   
     li.appendChild(p);
     li.appendChild(icon); 
     ul.appendChild(li);
-    }
-    checkUI()
-    newItem.value = ''
+}
 
+function addItemToStorage(item) {
+    
+    const ItemsfromStorage = getitemsFromStorage()
+    
+    ItemsfromStorage.push(item);
+
+    localStorage.setItem('items', JSON.stringify(ItemsfromStorage))
 }
 
 
+function getitemsFromStorage(){
+
+    let ItemsfromStorage;
+
+    if(localStorage.getItem('items') === null){
+        ItemsfromStorage = [];
+    } else{
+        ItemsfromStorage = JSON.parse(localStorage.getItem('items'))
+    }
+
+    return ItemsfromStorage;
+}
 
 function deleteItem(e) {
     if(e.target.nodeName === 'I') {
@@ -105,12 +129,13 @@ function checkUI(){
 
 }
 
+function initApp(){
+    addBtn.addEventListener('click', addNewItem);
+    ul.addEventListener('click', deleteItem)
+    clear.addEventListener('click', clearItems)
+    form.addEventListener('input', filterItems)
+    document.addEventListener('DOMContentLoaded', displayItems)
 
-
-
-addBtn.addEventListener('click', addNewItem);
-ul.addEventListener('click', deleteItem)
-clear.addEventListener('click', clearItems)
-form.addEventListener('input', filterItems)
-
-checkUI()
+    checkUI()
+}
+initApp()
