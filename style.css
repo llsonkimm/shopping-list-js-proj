@@ -29,7 +29,10 @@ img{
 .new-items, .filter {
     margin-block: 20px;
 }
-
+.edit-mode {
+    color: #bebebebb;
+    opacity: 0.6;
+}
 input{
     background-color: inherit;
     border: 1px solid white;
