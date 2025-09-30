@@ -23,38 +23,42 @@ function addNewItem(e) {
   e.preventDefault();
 
   const newEl = newItem.value;
-  addItemtoDom(newEl);
-  addItemToStorage(newEl);
 
-  checkUI();
-  newItem.value = '';
-}
-
-function addItemtoDom(item) {
   if (newEl === '') {
     alert('Please Add an Item');
     return;
   }
   if (editMode) {
-    const editEl = ul.qu;
+    const editEl = ul.querySelector('.edit-mode');
+    removeFromStorage(editEl.textContent);
+    editEl.classList.remove('edit-mode');
+    editEl.remove();
+    editMode = false;
+  } else {
+    if(ifItemExists(newEl)){
+      alert('This item already exists')
+      return;
+    }
   }
+
   addItemtoDom(newEl);
   addItemToStorage(newEl);
 
   checkUI();
-
   newItem.value = '';
 }
 
+
 function addItemtoDom(item) {
   const li = document.createElement('li');
-
   li.className = 'item';
 
   const p = document.createElement('p');
   p.innerText = item;
+
   const icon = document.createElement('i');
   icon.className = 'fa-solid fa-circle-xmark';
+
   li.appendChild(p);
   li.appendChild(icon);
   ul.appendChild(li);
@@ -96,12 +100,19 @@ function editItem(item) {
     i.classList.remove('edit-mode');
   });
   item.classList.add('edit-mode');
+  addBtn.textContent = 'Update Item'
+  addBtn.style.backgroundColor = 'green'
   newItem.value = item.textContent;
+}
+
+function ifItemExists(item) {
+  const ItemsfromStorage = getitemsFromStorage()
+  return ItemsfromStorage.includes(item);
 }
 
 function deleteItem(item) {
   item.remove();
-  removeFromStorage(item.firstElementChild.textContent);
+  removeFromStorage(item.textContent);
   checkUI();
 }
 
@@ -146,6 +157,7 @@ function filterItems(e) {
 }
 
 function checkUI() {
+  newItem.value = ''
   const li = ul.querySelectorAll('li');
   // console.log(Array.from(ul.children));
   if (li.length === 0) {
@@ -158,6 +170,11 @@ function checkUI() {
     form.style.display = 'block';
     clear.style.display = 'block';
   }
+
+  addBtn.textContent = '+Add item'
+  addBtn.style.backgroundColor = 'rgb(2, 143, 185)'
+  editMode = false;
+
 }
 
 function initApp() {
